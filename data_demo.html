@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="msapplication-tap-highlight" content="no" />
+<title></title>
+<script type="text/javascript" src="zepto.js"></script>
+<script type="text/javascript" src="juicer.js"></script>
+<style>
+ul, li{ list-style: none;}
+img{ width: 100px; height: 50px;}
+</style>
+</head>
+<body>
+
+<ul id="productUl"></ul>
+
+<!-- <ul>
+  <li>
+    <h3>奥迪<span>A4L</span></h3>
+    <p>2015款 35 TFSI 自动标准型</p>
+    <p>市场均价：26.09万</p>
+    <p><b>要买车价：</b><em>25.34万</em></p>
+    <a href="#"><img src="" alt="" /></a>
+  </li>
+</ul> -->
+
+<script id="tpl_product" type="text/template">
+  
+  // {@helper num}
+  //     function(number) {
+  //         return number;
+  //     }
+  // {@/helper}
+
+  {@each list as it, index}
+    {@if index <= 4}
+      <li class="item_${index} {@if index==0}first{@/if}">
+        <h3>${it.brandName}<span>${it.model}</span></h3>
+        <p>${it.allocation}</p>
+        <p>市场均价：${it.marketPrice}万</p>
+        <p><b>要买车价：</b><em>${it.price}</em>万</p>
+        <a href="#"><img src="${it.picUrl}" alt="" /></a>
+      </li>
+    {@/if}
+  {@/each}
+</script>
+
+<script id="tpl_more" type="text/template">
+  {@each list as it, index}
+    <li>
+      <h3>${it.brandName}<span>${it.model}</span></h3>
+      <p>${it.allocation}</p>
+      <p>市场均价：${it.marketPrice}万</p>
+      <p><b>要买车价：</b><em>${it.price}</em>万</p>
+      <a href="#"><img src="${it.picUrl}" alt="" /></a>
+    </li>
+  {@/each}
+</script>
+
+<script>
+
+$(document).ready(function() {
+
+
+  $.ajax({
+    url: 'json.json',
+      data: {},
+      dataType: 'json',
+      jsonp: 'callback',
+      success: function(res) {
+
+        var tpl_product = $('#tpl_product').html();
+        var html = juicer(tpl_product, res.result.product);
+
+        $('#productUl').html(html);
+
+      },
+      error: function(xhr, type){
+          alert(['error',xhr,type])
+      }
+  })
+})
+
+</script>
+
+</body>
+</html>
